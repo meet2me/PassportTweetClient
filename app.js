@@ -28,16 +28,25 @@ function generateNonce() {
 
 // Save into a config
 // Note: Access token will be different for every user (preferably, will be provided from front-end)
+
+// Application
 var consumerKey = 'DL9uUWGLYVlv89u8Ds2A';
 var consumerSecret = 'ueBvKdkbpra2UM1GATgUa9J7wyEZim06qBYO8yaRQWg';
+
+// User
 var accessToken = '480485341-6pPxBKkzW7o2MswvdfXmG78dg3K6egfCEy8IyUmM';
 var accessTokenSecret = 'jZWaNaZo1JEl5uFEI9BfRjjeTXr4fVKYnh5EPii9Bs';
+
+// Random
 var nonce = generateNonce();
 
 // Generate OAuth Signature
 var method = 'GET';
-var urlString = 'https://api.twitter.com/1.1/statuses/home_timeline.json'
+var urlString = 'https://api.twitter.com/1.1/statuses/home_timeline.json';
 var params = '';
+//console.log(encodeData(params));
+
+
 var oauth_headers = ['oauth_consumer_key=' + consumerKey,
 'oauth_nonce=' + nonce,
 'oauth_signature_method=HMAC-SHA1',

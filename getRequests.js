@@ -1,9 +1,15 @@
+/*Code to generate headers and functions for getting tokens and tweets*/
+
 var https = require ('https');
 var url = require('url');
 var request = require('request');
 var crypto = require('crypto');
 var http = require('http');
 var fs = require('fs');
+//var mongoose = require('mongoose');
+
+var DBHandler = require('./dbHandle.js').DBHandler;
+var dbHandler= new DBHandler('localhost', 27017);
 
 var createSignature = require('./createSignature.js')
 var randomGeneration = require('./randomGeneration.js');
@@ -12,8 +18,6 @@ var obj = JSON.parse(fs.readFileSync('consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
-
-
 
 
 module.exports = {
@@ -69,6 +73,7 @@ module.exports = {
         req.session.oauth_token_secret = oauth_token_secret.split('=')[1];
         // TODO: Generate authorization URL
         //URL to authorize an app
+        //Fetch 
         var authUrl = 'https://api.twitter.com/oauth/authorize?oauth_token='+req.session.oauth_token;
         //Will be getting from respone : used in next request to get access token
         var oauth_verifier = "";
@@ -83,7 +88,7 @@ module.exports = {
 
   getTweet : function(req,res){
     var method = 'GET';
-    var urlString = 'https://api.twitter.com/1.1/statuses/home_timeline.json';
+    var urlString = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
     var params = '';
 
     var oauth_headers = this.buildHeaders({
@@ -93,18 +98,33 @@ module.exports = {
     var options = createSignature.create(method,urlString,params,oauth_headers,consumerSecret,req.session.access_token_secret,null);
     var value = '';
     var tweets = '';
+    var text = '';
     var reqGet = https.request(options, function(resToken) {
       console.log("statusCode: ", resToken.statusCode);
       //console.log("Req: ",req);
       var data = '';
       resToken.on('data', function(chunk) {
         data += chunk;
-        tweets = data.toString();
+        //tweets = data.toString();
       });
       resToken.on('end', function() {
-        tweets = JSON.parse(tweets);
+        tweets = JSON.parse(data);
         req.session.tweets = tweets;
-        //console.log("Tweets : ", tweets);
+        
+        //Save tweets to DB
+        dbHandler.saveTweets(tweets,function(error){
+          if(error) {
+            console.log("DB Error:",error);
+          }
+        });
+        
+        //Save access token & id to DB
+        dbHandler.saveToken(tweets,req.session.access_token,function(error){
+          if(error){
+            console.log("DB Error : ", error);
+          }
+        });
+
         res.render('showTimelineJade',{data : tweets});
       });
     }).on('error', function(error) {

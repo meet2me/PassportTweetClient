@@ -6,6 +6,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 var tweet='';
 var created_at='';
+var userId = '';
 
 DBHandler = function(host, port) {
   this.db= new Db('tweetDb', new Server(host, port, {safe: false}, {auto_reconnect: true}, {}));
@@ -44,6 +45,40 @@ DBHandler.prototype.saveTweets = function(tweets,callback){
         });
       }
       //console.log("Tweet Out: ",clubTweet);
+    }
+  });
+};
+
+DBHandler.prototype.saveToken = function(tweets,token,callback){
+  this.db.collection('user',function(error,tweet_collection){
+    var clubTweet=[];
+    var i=tweets.length;
+    if( error ) {
+      callback(error);
+      }
+      else{
+        for(var i =0;i< tweets.length;i++ ) {
+        userId = tweets[i].user.id;
+        created_at = tweets[i].created_at;
+        //clubTweet.push(tweet);
+        //console.log("DB Tweet: ",tweet);
+        }
+        tweet_collection.insert({userId :userId, token : token },function(){
+          callback(null,tweet);
+        });        
+      }
+  });
+};
+
+DBHandler.prototype.lookUpToken = function(token,callback){
+  this.db.collection('user',function(error,user_collection){
+    if(error){
+      callback(error);
+    }
+    else{
+      user_collection.distinct({userId:token},function(){
+        callback(null,token);
+      });
     }
   });
 };

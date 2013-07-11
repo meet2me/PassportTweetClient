@@ -44,10 +44,19 @@ DBHandler.prototype.saveTweets = function(tweets,callback){
         userId = tweets[0].user.id;
         //console.log("DB Tweet: ",tweet);
       }
-      tweet_collection.insert({userId: userId, text : tweets, totalTweets : counter},function(){
+      tweet_collection.findOne({userId: userId},function(error,id){
+        if(error) {console.log("Error: ",error);}
+        else{
+          if(!id){
+            tweet_collection.insert({userId: userId, text: tweets, totalTweets: counter},function(){
           callback(null,tweet);
-        });
-      //console.log("Tweet Out: ",clubTweet);
+          });
+          }
+          else{
+            callback(null,tweets);
+          }
+        }
+      }); 
     }
   });
 };

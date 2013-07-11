@@ -1,0 +1,13 @@
+html
+  head
+    | <style type="text/css">
+    include ../public/stylesheets/style.css
+    | </style>
+  body
+    h2(align='center') Timeline Stats
+      table#userdata(align='center')
+        tbody 
+          p| #{data.displayName}
+          p| User Id:#{data.id}
+          p| User Name:#{data.username}
+          img(src = '#{data.photos[0].value}')

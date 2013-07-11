@@ -45,14 +45,13 @@ module.exports = {
   getTweet : function(token,tokenSecret,callback){
     var method = 'GET';
     var urlString = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-    var params = '';
+    var params = ['count=200'];
 
     var oauth_headers = this.buildHeaders({
       token: token
     });
 
     var options = createSignature.create(method,urlString,params,oauth_headers,consumerSecret,tokenSecret);
-    var value = '';
     var tweets = '';
     var text = '';
     var reqGet = https.request(options, function(resToken) {

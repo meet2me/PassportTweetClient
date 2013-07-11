@@ -33,6 +33,7 @@ DBHandler.prototype.saveTweets = function(tweets,callback){
     var i=tweets.length;
     var counter= 0;
     var userId = '';
+    var latestTweetId = '';
     if( error ) {
       callback(error);
       }
@@ -42,17 +43,27 @@ DBHandler.prototype.saveTweets = function(tweets,callback){
         created_at = tweets[i].created_at;
         counter+=1;
         userId = tweets[0].user.id;
+        latestTweetId = tweets[0].id_str;
         //console.log("DB Tweet: ",tweet);
       }
       tweet_collection.findOne({userId: userId},function(error,id){
         if(error) {console.log("Error: ",error);}
         else{
           if(!id){
-            tweet_collection.insert({userId: userId, text: tweets, totalTweets: counter},function(){
-          callback(null,tweet);
-          });
+            //for(var i =0;i< tweets.length;i++){
+              tweet_collection.insert({userId: userId, text: tweets, totalTweets: counter, latestTweetId: latestTweetId},function(){
+              callback(null,tweets);
+              });
+            //}
           }
           else{
+            /*if(){
+              //if currrent tweet-id > latestTweet-id of DB
+              //then fetch more 200 tweets
+            }
+            else{
+              callback(null,tweets);
+            }*/  
             callback(null,tweets);
           }
         }

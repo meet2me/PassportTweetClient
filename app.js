@@ -15,7 +15,9 @@ var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
 
 var DBHandler = require('./dbHandle.js').DBHandler;
-var dbHandler= new DBHandler('localhost', 27017);
+var dbHandler = new DBHandler('localhost', 27017);
+//var getTweets = require('./getTweets'); 
+
 var data ='';
 
 passport.use(new TwitterStrategy({
@@ -30,15 +32,20 @@ passport.use(new TwitterStrategy({
       profile.token_secret = tokenSecret;
       //data = JSON.parse(profile);
       data=profile;
-      console.log("Data :",data);
-      //console.log("Profile: ",profile);
+      //Fetch Tweets from getTweet module
+      require('./getTweets.js').getTweet(token,tokenSecret,function(error){
+        if(error){
+          console.log("Error Fetching Tweet: ",error);
+        }
+      });
+
       dbHandler.findOrCreateUser(profile, function(error, user){
         if(error){
           console.log("DB Error : ", error);
         }
         return done(null, user);
       });
-  	}
+    }
 ));
 
 passport.serializeUser(function(user, done) {

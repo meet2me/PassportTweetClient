@@ -28,22 +28,25 @@ DBHandler.prototype.getCollection = function(callback) {
 };
 
 DBHandler.prototype.saveTweets = function(tweets,callback){
-	this.getCollection(function(error,tweet_collection) {
+	this.db.collection('tweets',function(error,tweet_collection) {
     var clubTweet=[];
     var i=tweets.length;
+    var counter= 0;
+    var userId = '';
     if( error ) {
       callback(error);
       }
     else {
-      for(var i =0;i< tweets.length;i++ ) {
+      for(var i =0;i< tweets.length;i++){
         tweet = tweets[i].text;
         created_at = tweets[i].created_at;
-        //clubTweet.push(tweet);
-        console.log("DB Tweet: ",tweet);
-        tweet_collection.insert({text :tweet, time: created_at},function(){
+        counter+=1;
+        userId = tweets[0].user.id;
+        //console.log("DB Tweet: ",tweet);
+      }
+      tweet_collection.insert({userId: userId, text : tweets, totalTweets : counter},function(){
           callback(null,tweet);
         });
-      }
       //console.log("Tweet Out: ",clubTweet);
     }
   });
@@ -76,6 +79,7 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
 
       if(!user) {
         self.saveToken(profile, callback);
+
       } else {
         callback(null, user);
       }

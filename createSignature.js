@@ -6,7 +6,7 @@ var crypto = require('crypto');
 module.exports = {
  create : function(method,urlString,params,oauth_headers,consumerSecret,access_token_secret){
  var reqString = method + '&'+ randomGeneration.encodeData(urlString) + '&' + randomGeneration.encodeData(params) + randomGeneration.encodeData('&') +randomGeneration.encodeData(oauth_headers.join('&'));
- console.log("Signature base string: ",reqString);
+ //console.log("Signature base string: ",reqString);
 
  var key = "";
  if(access_token_secret!=null){

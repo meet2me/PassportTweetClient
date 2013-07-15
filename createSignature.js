@@ -5,8 +5,14 @@ var crypto = require('crypto');
 
 module.exports = {
  create : function(method,urlString,params,oauth_headers,consumerSecret,access_token_secret){
- var reqString = method + '&'+ randomGeneration.encodeData(urlString) + '&' + randomGeneration.encodeData(params) + randomGeneration.encodeData('&') +randomGeneration.encodeData(oauth_headers.join('&'));
- //console.log("Signature base string: ",reqString);
+ console.log("Parameters:",params);
+ var reqString = method + '&'+ randomGeneration.encodeData(urlString) + '&' + randomGeneration.encodeData(params.join('&')) + randomGeneration.encodeData('&') +randomGeneration.encodeData(oauth_headers.join('&'));
+if(params[1]&&params[2]){
+	reqString = method + '&'+ randomGeneration.encodeData(urlString) + '&' + randomGeneration.encodeData(params[0]) + randomGeneration.encodeData('&') 
+				+randomGeneration.encodeData(oauth_headers.join('&')) + randomGeneration.encodeData('&') + randomGeneration.encodeData(params[1]) +randomGeneration.encodeData('&') 
+				+randomGeneration.encodeData(params[2]) ;
+}
+ console.log("Signature base string: ",reqString);
 
  var key = "";
  if(access_token_secret!=null){
@@ -29,6 +35,3 @@ module.exports = {
  return options;
  }
 };
-
-
- 

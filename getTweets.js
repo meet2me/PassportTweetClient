@@ -75,18 +75,18 @@ module.exports = {
           if(error){
             console.log("Error:" ,error);
           }
-          //since_id : Id of last recent tweet in DB
-          if(id.latestTweetId!=null){
-            since_id = id.latestTweetId;
+          if(id!=null){
+            since_id = id.tweetId;    //since_id : Id of last/recent tweet in DB
           }
-          if(this_tweet_id > since_id && since_id!=null){
-            //call save tweet with more count=200
-            console.log("If more new tweets are available");
+          console.log("since_id:",id.tweetId);
+
+          if(since_id > 0 && this_tweet_id > since_id){
+            console.log("If more new tweets are available..");
             self.getMoreTweets(userId,token,tokenSecret,since_id);
           }
           //Save tweets to DB
-          else{
-            console.log("If no more tweets or new user");
+          else if(!since_id){
+            console.log("If New User..");
             dbHandler.saveTweets(tweets,function(error){
             if(error) {
               console.log("DB Error:",error);
@@ -94,13 +94,6 @@ module.exports = {
             });
           }
         });
-        
-        /*Save tweets to DB
-        dbHandler.saveTweets(tweets,function(error){
-          if(error) {
-            console.log("DB Error:",error);
-          }
-        });*/
       });
     }).on('error', function(error) {
         console.log("Error: ", error);
@@ -128,7 +121,8 @@ module.exports = {
       });
       resToken.on('end', function() {
         tweets = JSON.parse(data);
-        dbHandler.updateTweets(tweets,function(error){
+        console.log("Tweets:",tweets);
+        dbHandler.saveTweets(tweets,function(error){
           if(error) {
             console.log("DB Error:",error);
           }

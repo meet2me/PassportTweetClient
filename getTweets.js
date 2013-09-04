@@ -18,7 +18,13 @@ var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
 
 var method = 'GET';
+<<<<<<< HEAD
 var urlString = ' https://api.twitter.com/1.1/statuses/user_timeline.json ';
+=======
+var urlString = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+
+
+>>>>>>> 2e8d0b1ad9d1e7779073aaf0271ed96b0c60f99f
 
 module.exports = {
   
@@ -73,6 +79,7 @@ module.exports = {
           if(error){
             console.log("Error:" ,error);
           }
+<<<<<<< HEAD
           //since_id : Id of last recent tweet in DB
           if(id.latestTweetId!=null){
             since_id = id.latestTweetId;
@@ -85,6 +92,20 @@ module.exports = {
           //Save tweets to DB
           else{
             console.log("If no more tweets or new user");
+=======
+          if(id!=null){
+            since_id = id.tweetId;    //since_id : Id of last/recent tweet in DB
+          }
+          console.log("since_id:",id.tweetId);
+
+          if(since_id > 0 && this_tweet_id > since_id){
+            console.log("If more new tweets are available..");
+            self.getMoreTweets(userId,token,tokenSecret,since_id);
+          }
+          //Save tweets to DB
+          else if(!since_id){
+            console.log("If New User..");
+>>>>>>> 2e8d0b1ad9d1e7779073aaf0271ed96b0c60f99f
             dbHandler.saveTweets(tweets,function(error){
             if(error) {
               console.log("DB Error:",error);
@@ -92,6 +113,7 @@ module.exports = {
             });
           }
         });
+<<<<<<< HEAD
         
         /*Save tweets to DB
         dbHandler.saveTweets(tweets,function(error){
@@ -99,6 +121,8 @@ module.exports = {
             console.log("DB Error:",error);
           }
         });*/
+=======
+>>>>>>> 2e8d0b1ad9d1e7779073aaf0271ed96b0c60f99f
       });
     }).on('error', function(error) {
         console.log("Error: ", error);
@@ -126,7 +150,12 @@ module.exports = {
       });
       resToken.on('end', function() {
         tweets = JSON.parse(data);
+<<<<<<< HEAD
         dbHandler.updateTweets(tweets,function(error){
+=======
+        console.log("Tweets:",tweets);
+        dbHandler.saveTweets(tweets,function(error){
+>>>>>>> 2e8d0b1ad9d1e7779073aaf0271ed96b0c60f99f
           if(error) {
             console.log("DB Error:",error);
           }

@@ -4,12 +4,13 @@ var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 
+var async = require('async');
 var tweet='';
 var created_at='';
 var userId = '';
 
 DBHandler = function(host, port) {
-  this.db= new Db('tweetstats', new Server(host, port, {safe: false}, {auto_reconnect: true}, {}));
+  this.db= new Db('tweetDb', new Server(host, port, {safe: false}, {auto_reconnect: true}, {}));
   this.db.open(function(error){
   	if(error){
   		console.log('Error : ', error);
@@ -20,86 +21,48 @@ DBHandler = function(host, port) {
 };
 
 DBHandler.prototype.saveTweets = function(tweets,callback){
-	this.db.collection('tweets',function(error,tweet_collection) {
-    var clubTweet=[];
-    var i=tweets.length;
-    var counter= 0;
+  this.db.collection('tweets',function(error,tweet_collection) {
     var userId = '';
-    var latestTweetId = '';
+    var tweetId = '';
+    var tweet = '';
     if( error ) {
       callback(error);
-      }
+    }
     else {
-
-      for(var i =0;i< tweets.length;i++){
-        tweet = tweets[i].text;
-        created_at = tweets[i].created_at;
-        counter+=1;
-        userId = tweets[0].user.id;
-        latestTweetId = tweets[0].id_str;
-        //console.log("DB Tweet: ",tweet);
-      }
-      tweet_collection.findOne({userId: userId},function(error,id){
-        if(error) {console.log("Error: ",error);}
-        else{
-          if(!id){
-            //new entry
-            //for(var i =0;i< tweets.length;i++){
-              tweet_collection.insert({userId: userId, text: tweets, totalTweets: counter, latestTweetId: latestTweetId},function(){
-              callback(null,tweets);
-              });
-            //}
-          }
-          else{
-            callback(null,tweets);
+      async.each(tweets,function(item,callback){
+        item._id = item.id_str;
+        tweet_collection.insert(item,function(){
+          callback(null,tweets);
+        });
+        },function(error){
+          if(error){
+            console.log("Error Saving Tweets:",error);
           }
         }
-      }); 
+      );
     }
-  });
-};
-
-DBHandler.prototype.updateTweets = function(tweets,callback){
-  this.db.collection('tweets',function(error,tweet_collection){
-    var i=tweets.length;
-    var counter= 0;
-    var userId = tweets[0].user.id;
-    var latestTweetId = tweets[0].id_str;
-    if(error){
-      callback(error);
-    }
-    else{
-      for(var i=0;i<tweets.length;i++){
-        tweet = tweets[i].text;
-        created_at = tweets[i].created_at;
-        counter+=1;          
-      }
-      tweet_collection.update({userId: userId},
-        { $set: {
-          text: tweets,
-          latestTweetId: latestTweetId,
-          totalTweets: counter
-        } 
-      });   
-      console.log("Tweets Updated.");
-    }
+    console.log("Tweets saved.");
   });
 };
 
 DBHandler.prototype.getLatestTweetId = function(userId, callback){
   this.db.collection('tweets',function(error,tweet_collection){
     if(error){
-      return callback(error);
+      console.log(error);
+      if(error.message.indexOf('unique')) {
+        // ignore
+        console.log('Duplicate');
+      } else {
+        return callback(error);
+      }
     }
-    //tweet_collection.findOne({userId: userId},{latestTweetId: 1, _id: 0},callback);
-    tweet_collection.findOne({userId: userId},{latestTweetId: 1, _id: 0},function(error,result){
-      if(result){
-        return callback;
-      }
-      else{
-        console.log("Error:",error);
-      }
-    });
+    //tweet_collection.findOne({userId: userId},{tweetId: 1, _id: 0},callback);
+    var options = {
+      "sort": ['id', 'desc'],
+      "limit": 1
+    }
+    tweet_collection.find({ 'user.id': userId}, {id:1},options,callback);
+    console.log("Inside getLatestTweetId");
   });
 };
 

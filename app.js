@@ -16,23 +16,22 @@ var callbackURL = obj.callback;
 
 var DBHandler = require('./dbHandle.js').DBHandler;
 var dbHandler = new DBHandler('localhost', 27017);
-//var getTweets = require('./getTweets');
+//var getTweets = require('./getTweets'); 
 
 var data ='';
 
 passport.use(new TwitterStrategy({
-	consumerKey: consumerKey,
-   	consumerSecret: consumerSecret,
-   	callbackURL: callbackURL
-  	},
-  	function(token, tokenSecret, profile, done) {
+  consumerKey: consumerKey,
+    consumerSecret: consumerSecret,
+    callbackURL: callbackURL
+    },
+    function(token, tokenSecret, profile, done) {
     //DB
       delete profile._raw;
       profile.access_token = token;
       profile.token_secret = tokenSecret;
       //data = JSON.parse(profile);
       data=profile;
-      console.log("data= ",data);
       //Fetch Tweets from getTweet module
       require('./getTweets.js').getTweet(token,tokenSecret,function(error){
         if(error){
@@ -61,7 +60,7 @@ app.get('/',function(req, res) {
  });
 
 app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get('/auth/twitter/callback',
+app.get('/auth/twitter/callback', 
   passport.authenticate('twitter', { successRedirect: '/showTimeline',
                                      failureRedirect: '/login' }));
 

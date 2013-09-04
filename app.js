@@ -56,7 +56,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 app.get('/',function(req, res) {
-    res.send('<html><body><a href="/auth/twitter">Sign in with Twitter</a></body></html>');
+    res.render('getLogin.jade');
  });
 
 app.get('/auth/twitter', passport.authenticate('twitter'));

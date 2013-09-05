@@ -45,6 +45,12 @@ passport.use(new TwitterStrategy({
         }
         return done(null, user);
       });
+      dbHandler.getUserTweets(profile, function(error,data){
+        if(error){
+          console.log("DB Error in printing data: ", error);
+        }
+        return done(null, data);
+      });
     }
 ));
 

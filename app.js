@@ -19,7 +19,7 @@ var dbHandler = new DBHandler('localhost', 27017);
 //var getTweets = require('./getTweets'); 
 
 var data ='';
-
+var tweets = '';
 passport.use(new TwitterStrategy({
   consumerKey: consumerKey,
     consumerSecret: consumerSecret,
@@ -49,7 +49,9 @@ passport.use(new TwitterStrategy({
         if(error){
           console.log("DB Error in printing data: ", error);
         }
-        return done(null, data);
+        console.log("Tweet:", data);
+        tweets = data;
+        // return done(null, data);
       });
     }
 ));
@@ -61,17 +63,18 @@ passport.deserializeUser(function(id, done) {
   dbHandler.findUser(id, done);
 });
 
-app.get('/',function(req, res) {
-    res.render('getLogin.jade');
- });
-
+// app.get('/',function(req, res) {
+//     res.render('getLogin.jade');
+//  });
+app.get('/', passport.authenticate('twitter'));
 app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback', 
   passport.authenticate('twitter', { successRedirect: '/showTimeline',
                                      failureRedirect: '/login' }));
 
 app.get('/showTimeline',function(req,res){
-  res.render('home.jade',{data : data});
+  res.render('home.jade',{data : data, 
+                          tweets : tweets});
 });
 
 http.createServer(app).listen(app.get('port'), function(){

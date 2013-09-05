@@ -11,3 +11,5 @@ html
           p| User Id:#{data.id}
           p| User Name:#{data.username}
           img(src = '#{data.photos[0].value}')
+          each tweet in tweets 
+            p #{tweet.text}

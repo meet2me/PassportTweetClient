@@ -58,10 +58,13 @@ DBHandler.prototype.getLatestTweetId = function(userId, callback){
     }
     //tweet_collection.findOne({userId: userId},{tweetId: 1, _id: 0},callback);
     var options = {
-      "sort": ['id', 'desc'],
-      "limit": 1
+      "limit": 1,
+      "sort": {'id': -1}
     }
-    tweet_collection.find({ 'user.id': userId}, {id:1},options,callback);
+    tweet_collection.findOne({ 'user.id': userId}, {id:1},options,callback);
+    // tweet_collection.find({'user.id':userId}, {id:1}, options).toArray(function(error, result){
+    //           console.log("result:",result);
+    // });
     console.log("Inside getLatestTweetId");
   });
 };
@@ -100,4 +103,27 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
     });
   });
 };
+
+DBHandler.prototype.getUserTweets = function(profile, callback){
+  var self = this;
+  this.db.collection('tweets',function(error,tweet_collection){
+    tweet_collection.find({'user.id': profile.id}).toArray(function(error, docs){
+      if(!error){
+        var intCount = docs.lenght;
+        if(intCount > 0){
+          var strJson = "";
+          for(var i=0; i<intCount;){
+           strJson += '{"tweet":"' + docs[i].text + '"}'
+           i=i+1;
+           if(i<intCount){strJson+=',';}
+          }
+          strJson = '{"userId":"'+profile.id+'","count":'+intCount+',"tweets":[' + strJson + "]}"
+          console.log(strJson);
+          callback("",JSON.parse(strJson));
+        }
+      }
+    });
+  });
+};
+
 exports.DBHandler = DBHandler;

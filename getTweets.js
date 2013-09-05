@@ -76,10 +76,12 @@ module.exports = {
             console.log("Error:" ,error);
           }
           if(id!=null){
-            since_id = id.tweetId;    //since_id : Id of last/recent tweet in DB
+            since_id = id.id;    //since_id : Id of last/recent tweet in DB
+            console.log("since_id:",since_id);
           }
-          console.log("since_id:",id.tweetId);
-
+          // console.log("since_id:",id.tweetId);
+          
+          console.log("Current Tweet Id from Twitter:", this_tweet_id);
           if(since_id > 0 && this_tweet_id > since_id){
             console.log("If more new tweets are available..");
             self.getMoreTweets(userId,token,tokenSecret,since_id);
@@ -121,7 +123,7 @@ module.exports = {
       });
       resToken.on('end', function() {
         tweets = JSON.parse(data);
-        console.log("Tweets:",tweets);
+        // console.log("Tweets:",tweets);
         dbHandler.saveTweets(tweets,function(error){
           if(error) {
             console.log("DB Error:",error);

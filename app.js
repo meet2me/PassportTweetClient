@@ -21,11 +21,11 @@ var dbHandler = new DBHandler('localhost', 27017);
 var data ='';
 
 passport.use(new TwitterStrategy({
-	consumerKey: consumerKey,
-   	consumerSecret: consumerSecret,
-   	callbackURL: callbackURL
-  	},
-  	function(token, tokenSecret, profile, done) {
+  consumerKey: consumerKey,
+    consumerSecret: consumerSecret,
+    callbackURL: callbackURL
+    },
+    function(token, tokenSecret, profile, done) {
     //DB
       delete profile._raw;
       profile.access_token = token;

@@ -17,11 +17,11 @@ DBHandler = function(host, port) {
   	} else {
   		console.log('Database connected.');
   	}
-  	});
+  });
 };
 
 DBHandler.prototype.saveTweets = function(tweets,callback){
-	this.db.collection('tweets',function(error,tweet_collection) {
+  this.db.collection('tweets',function(error,tweet_collection) {
     var userId = '';
     var tweetId = '';
     var tweet = '';

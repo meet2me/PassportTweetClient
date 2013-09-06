@@ -20,7 +20,7 @@ html
       br
       br
 
-      table#heading(align='center')
+      table#heading(align='center').table-striped
         tr
           td(rowspan='2', border='1')
             img(src = '#{data.photos[0].value}')
@@ -32,7 +32,7 @@ html
 
       br
 
-      table#content(align='center')
+      table#content(align='center').table-striped.table-bordered
         tbody
           each tweet in tweets
             tr

@@ -3,11 +3,11 @@ body {
   background-color: gray;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-table{
+/*table{
 	border:1px solid #AAA;
 	border-radius: 7px;
 	width: 800px;
-}
+}*/
 #content tr:hover{
 	cursor: pointer;
 	background-color: #DDD;

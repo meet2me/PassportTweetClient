@@ -108,9 +108,17 @@ DBHandler.prototype.getUserTweets = function(profile, callback){
   var self = this;
   var tweets = '';
   this.db.collection('tweets',function(error,tweet_collection){
-    tweet_collection.find({'user.id': profile.id}).toArray(function(error, result){
-      callback(null, result);
-
+    if(error){
+      console.log(error);
+      if(error.message.indexOf('unique')) {
+        // ignore
+        console.log('Duplicate');
+      } else {
+        return callback(error);
+      }
+    }
+    tweet_collection.find({'user.id': profile.id}).toArray(function(err, results){
+      callback(null, results);
     });
   });
 };

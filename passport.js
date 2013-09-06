@@ -3,7 +3,7 @@ var fs = require('fs');
 var TwitterStrategy = require('passport-twitter').Strategy;
 
 
-var obj = JSON.parse(fs.readFileSync('consumerCredentials.json', 'utf8'));
+var obj = JSON.parse(fs.readFileSync('./config/consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;

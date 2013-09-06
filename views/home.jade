@@ -11,32 +11,31 @@ html
     | </style>
 
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-    script(src='/bootstrap/js/bootstrap.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
 
   body
     h2(align='center')
-
       u Timeline Stats
-      br
-      br
-
-      table#heading(align='center').table-striped
+      table#heading(align= 'center').table-striped
+        h5
+          a(href= '/logout', style='float: right,padding-right=10px;') Logout
         tr
           td(rowspan='2', border='1')
-            img(src = '#{data.photos[0].value}')
+            img(src = '#{user.photos[0].value}')
           td
-            | Name: #{data.displayName} (#{data.id})&nbsp;
+            | Name: #{user.displayName}
         tr
           td
-            | Screen Name: #{data.username}
+            | Screen Name: #{user.username}
 
+    h4(align='center')
       br
-
-      table#content(align='center').table-striped.table-bordered
-        tbody
-          each tweet in tweets
-            tr
-              td
-                a(href='#{tweet.user.url}') #{tweet.user.name}
-              td= tweet.text
-              td= tweet.created_at
+      a(href='#{user._json.url}') Click to visit Website
+      br
+      | Total Tweets: #{user._json.statuses_count}
+      br
+      |  Last Tweet At: #{user._json.status.created_at}
+      br
+      | Followers Count: #{user._json.followers_count}
+      br
+      | Friends Count: #{user._json.friends_count}

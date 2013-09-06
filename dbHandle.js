@@ -93,7 +93,7 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
     if(error) { return callback(error); }
     user_collection.findOne({id: profile.id},function(error, user){
       if(error) { return callback(error); }
-
+      console.log('profile status id: ', profile._json.status.id);
       if(!user) {
         self.saveToken(profile, callback);
 
@@ -104,7 +104,7 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
   });
 };
 
-DBHandler.prototype.getUserTweets = function(profile, callback){
+DBHandler.prototype.getUserTweets = function(userId, callback){
   var self = this;
   var tweets = '';
   this.db.collection('tweets',function(error,tweet_collection){
@@ -117,7 +117,8 @@ DBHandler.prototype.getUserTweets = function(profile, callback){
         return callback(error);
       }
     }
-    tweet_collection.find({'user.id': profile.id}).toArray(function(err, results){
+    console.log("UserId:", userId);
+    tweet_collection.find({'user.id': userId}).toArray(function(err, results){
       callback(null, results);
     });
   });

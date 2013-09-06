@@ -6,10 +6,12 @@ var express = require('express');
 
 var passport = require('passport');
 var app = express();
+var routes = require('./routes');
 require('./config/configureApp')(app);
 var TwitterStrategy = require('passport-twitter').Strategy;
 
-var obj = JSON.parse(fs.readFileSync('./config/consumerCredentials.json', 'utf8'));
+var routes = require('./routes');
+var obj = JSON.parse(fs.readFileSync('config/consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
@@ -31,7 +33,7 @@ passport.use(new TwitterStrategy({
       profile.access_token = token;
       profile.token_secret = tokenSecret;
       //data = JSON.parse(profile);
-      data=profile;
+      data = profile;
       //Fetch Tweets from getTweet module
       require('./getTweets.js').getTweet(token,tokenSecret,function(error){
         if(error){
@@ -44,13 +46,6 @@ passport.use(new TwitterStrategy({
           console.log("DB Error : ", error);
         }
         return done(null, user);
-      });
-      dbHandler.getUserTweets(profile, function(error,data){
-        if(error){
-          console.log("DB Error in printing data: ", error);
-        }
-        tweets = data;
-        //return done(null, tweets);
       });
     }
 ));
@@ -65,15 +60,26 @@ passport.deserializeUser(function(id, done) {
 // app.get('/',function(req, res) {
 //     res.render('getLogin.jade');
 //  });
-app.get('/', passport.authenticate('twitter'));
+
+app.get('/', routes.index);
+// app.get('/', passport.authenticate('twitter'));
 app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback', 
-  passport.authenticate('twitter', { successRedirect: '/showTimeline',
+  passport.authenticate('twitter', { successRedirect: '/',
                                      failureRedirect: '/login' }));
 
-app.get('/showTimeline',function(req,res){
-  res.render('home.jade',{data : data, 
-                          tweets : tweets});
+app.get('/login', function(req,res){
+  res.render('getLogin.jade');
+});
+
+app.get('/logout', function(req, res) {
+    //To login from only application
+    req.session.user = undefined;
+    /*
+    To login from twitter uncomment this
+    req.logout();
+    */
+    res.redirect('/login');
 });
 
 http.createServer(app).listen(app.get('port'), function(){

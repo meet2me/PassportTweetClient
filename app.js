@@ -40,13 +40,14 @@ passport.use(new TwitterStrategy({
           console.log("Error Fetching Tweet: ",error);
         }
       });
-
+      console.log("Before findOrCreateUser");
       dbHandler.findOrCreateUser(profile, function(error, user){
         if(error){
           console.log("DB Error : ", error);
         }
         return done(null, user);
       });
+      console.log("After findOrCreateUser");
     }
 ));
 
@@ -75,10 +76,9 @@ app.get('/login', function(req,res){
 app.get('/logout', function(req, res) {
     //To login from only application
     req.session.user = undefined;
-    /*
-    To login from twitter uncomment this
+    
+    // To login from twitter uncomment this
     req.logout();
-    */
     res.redirect('/login');
 });
 

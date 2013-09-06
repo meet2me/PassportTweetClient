@@ -98,6 +98,11 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
         self.saveToken(profile, callback);
 
       } else {
+        console.log('Profile:', user._json.status.id);
+        if(profile._json.status.id > user._json.status.id){
+          console.log("Need to update profile");
+          user_collection.update({id: profile.id}, profile); 
+        }
         callback(null, user);
       }
     });

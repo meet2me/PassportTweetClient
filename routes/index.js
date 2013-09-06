@@ -19,7 +19,7 @@ exports.index = function(req, res){
 	          console.log("DB Error in printing data: ", error);
 	        }
 	        tweets = data;
-	        console.log("DAta:", data);
+	        // console.log("DAta:", data);
 	    });
 		console.log("Session:", req.user);
 		res.render('home',{ user: req.user, tweets: tweets});

@@ -3,9 +3,20 @@ html
     | <style type="text/css">
     include ../public/stylesheets/style.css
     | </style>
+    | <style type="text/css">
+    include ../public/bootstrap/css/bootstrap.min.css
+    | </style>
+    | <style type="text/css">
+    include ../public/bootstrap/css/bootstrap-responsive.min.css
+    | </style>
+
+    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+
   body
-    h2(align='center') Timeline Stats
-      table#userdata(align='center')
+    h2(align='center')
+      label.alert-success Timeline Stats
+      table#userdata(align='center').table-striped
         tbody 
           p| #{data.displayName}
           p| User Id:#{data.id}

@@ -10,7 +10,7 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 module.exports = function(app){
     app.configure(function(){
     app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
+    app.set('../views', __dirname + 'views');
     app.set('view engine', 'jade');
     app.set('view options', {layout: false});
     app.use(express.favicon());
@@ -22,7 +22,7 @@ module.exports = function(app){
     app.use(passport.session());
     app.use(express.bodyParser());
     app.use(app.router);
-    app.use(require('stylus').middleware(__dirname + '/public'));
-    app.use(express.static(__dirname + '/public'));
+    app.use(require('stylus').middleware(__dirname + 'public'));
+    app.use(express.static(__dirname + 'public'));
   });
 };

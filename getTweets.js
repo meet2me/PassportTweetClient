@@ -12,13 +12,14 @@ var dbHandler= new DBHandler('localhost', 27017);
 var createSignature = require('./createSignature.js')
 var randomGeneration = require('./randomGeneration.js');
 
-var obj = JSON.parse(fs.readFileSync('consumerCredentials.json', 'utf8'));
+var obj = JSON.parse(fs.readFileSync('./config/consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
 
 var method = 'GET';
-var urlTimeline = JSON.parse(fs.readFileSync('getUrl.json', 'utf8'));
+var urlTimeline = JSON.parse(fs.readFileSync('./config/getUrl.json', 'utf8'));
+
 var urlString = urlTimeline.user_timeline;
 
 

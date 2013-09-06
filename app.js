@@ -6,10 +6,10 @@ var express = require('express');
 
 var passport = require('passport');
 var app = express();
-require('./configureApp')(app);
+require('./config/configureApp')(app);
 var TwitterStrategy = require('passport-twitter').Strategy;
 
-var obj = JSON.parse(fs.readFileSync('consumerCredentials.json', 'utf8'));
+var obj = JSON.parse(fs.readFileSync('./config/consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;

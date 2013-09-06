@@ -4,10 +4,28 @@ html
     include ../public/stylesheets/style.css
     | </style>
   body
-    h2(align='center') Timeline Stats
-      table#userdata(align='center')
-        tbody 
-          p| #{data.displayName}
-          p| User Id:#{data.id}
-          p| User Name:#{data.username}
-          img(src = '#{data.photos[0].value}')
+    h2(align='center')
+      u Timeline Stats
+      br
+      br
+
+      table#heading(align='center')
+        tr
+          td(rowspan='2', border='1')
+            img(src = '#{data.photos[0].value}')
+          td
+            | Name: #{data.displayName} (#{data.id})&nbsp;
+        tr
+          td
+            | Screen Name: #{data.username}
+
+      br
+
+      table#content(align='center')
+        tbody
+          each tweet in tweets
+            tr
+              td
+                a(href='#{tweet.user.url}') #{tweet.user.name}
+              td= tweet.text
+              td= tweet.created_at

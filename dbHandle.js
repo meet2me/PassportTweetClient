@@ -106,22 +106,11 @@ DBHandler.prototype.findOrCreateUser = function(profile, callback){
 
 DBHandler.prototype.getUserTweets = function(profile, callback){
   var self = this;
+  var tweets = '';
   this.db.collection('tweets',function(error,tweet_collection){
-    tweet_collection.find({'user.id': profile.id}).toArray(function(error, docs){
-      if(!error){
-        var intCount = docs.lenght;
-        if(intCount > 0){
-          var strJson = "";
-          for(var i=0; i<intCount;){
-           strJson += '{"tweet":"' + docs[i].text + '"}'
-           i=i+1;
-           if(i<intCount){strJson+=',';}
-          }
-          strJson = '{"userId":"'+profile.id+'","count":'+intCount+',"tweets":[' + strJson + "]}"
-          console.log(strJson);
-          callback("",JSON.parse(strJson));
-        }
-      }
+    tweet_collection.find({'user.id': profile.id}).toArray(function(error, result){
+      callback(null, result);
+
     });
   });
 };

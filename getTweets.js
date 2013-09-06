@@ -18,7 +18,8 @@ var consumerSecret = obj.consumer_secret_key;
 var callbackURL = obj.callback;
 
 var method = 'GET';
-var urlString = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+var urlTimeline = JSON.parse(fs.readFileSync('getUrl.json', 'utf8'));
+var urlString = urlTimeline.user_timeline;
 
 
 

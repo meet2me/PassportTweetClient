@@ -49,7 +49,9 @@ passport.use(new TwitterStrategy({
         if(error){
           console.log("DB Error in printing data: ", error);
         }
-        return done(null, data);
+        tweets = data;
+        console.log("tweets = ",tweets);
+        //return done(null, tweets);
       });
     }
 ));
@@ -71,7 +73,7 @@ app.get('/auth/twitter/callback',
                                      failureRedirect: '/login' }));
 
 app.get('/showTimeline',function(req,res){
-  res.render('home.jade',{data : data});
+  res.render('home.jade',{data : data, tweets : tweets});
 });
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -7,21 +7,32 @@ table{
 	border:1px solid #AAA;
 	border-radius: 7px;
 	width: 800px;
-	cursor: pointer;
 }
-tr:hover{
+#content tr:hover{
+	cursor: pointer;
 	background-color: #DDD;
 }
 a{
 	text-decoration: none;
 }
-a:hover{ 
+a:hover{
 	text-decoration: underline;
 	text-indent: 2px;
 	text-transform: 3px;
 	transition : 0.7s;
 	color:blue;
 }
-a {
+a{
   color: #00b7ff;
+}
+#heading{
+	margin-left: 25%;
+	width: 50%;
+	vertical-align: center;
+	font-size: 18px;
+	border: 1px solid #DDD;
+}
+#heading img{
+	padding: 5px;
+	margin-left: 35%;
 }

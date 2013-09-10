@@ -129,4 +129,31 @@ DBHandler.prototype.getUserTweets = function(userId, callback){
   });
 };
 
+
+DBHandler.prototype.getTodayTweet = function(userId, callback){
+  var self = this;
+  var tweets = '';
+  this.db.collection('tweets',function(error,tweet_collection){
+    if(error){
+      console.log(error);
+      if(error.message.indexOf('unique')) {
+        // ignore
+        console.log('Duplicate');
+      } else {
+        return callback(error);
+      }
+    }
+    console.log("UserId:", userId);
+    var dateformat = require("dateformat");
+
+    // var date = dateformat(Date()," ddd mmm d");
+    var date = "Fri Sep 06";
+    // date.format("%a %b %d %H:%M:%S +0000 %Y");
+    console.log("Date == >",date);
+    tweet_collection.find({ "created_at": '/'date'/'  }).toArray(function(err, results){
+      callback(null, results);
+    });
+  });
+};
+
 exports.DBHandler = DBHandler;

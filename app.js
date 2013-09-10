@@ -82,6 +82,12 @@ app.get('/logout', function(req, res) {
     res.redirect('/login');
 });
 
+app.get('/todayTweet',function(req,res){
+  dbHandler.getTodayTweet(req.user.id, function(error, result){
+    console.log("Result == ",result);
+  } );
+})
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

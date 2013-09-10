@@ -20,9 +20,9 @@ exports.index = function(req, res){
 	        }
 	        tweets = data;
 	        // console.log("DAta:", data);
-	    });
 		console.log("Session:", req.user);
 		res.render('home',{ user: req.user, tweets: tweets});
+		});
 	}
 	
   // res.render('index', { title: 'Express' });

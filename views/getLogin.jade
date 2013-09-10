@@ -1,11 +1,21 @@
 !!! 5
 head
-    title Improwised | Twitter App 
+  
+  | <style type="text/css">
+  include ../public/bootstrap/css/bootstrap.min.css
+  | </style>
+  | <style type="text/css">
+  include ../public/bootstrap/css/bootstrap-responsive.min.css
+  | </style>
+
+  script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+  script(src='//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js')
+
+  title Improwised | Twitter App 
   body
     table(align='center')
       tr
         td Improwised Twitter Client
       tr
         td
-          a(href='/auth/twitter')
-            img(src='../images/sign-in-with-twitter-gray.png')
+          a(href='/auth/twitter').btn  Click Here

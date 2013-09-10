@@ -14,16 +14,13 @@ exports.index = function(req, res){
 		res.render('getLogin');
 	}
 	else{
-		dbHandler.getUserTweets(req.user.id, function(error,data){
-	        if(error){
-	          console.log("DB Error in printing data: ", error);
-	        }
-	        tweets = data;
-	        // console.log("DAta:", data);
+	    dbHandler.findUser(req.user.id, function(error,data){
+	    	if(error){
+	    		console.log("DB Error : ", error);
+	    	}
+	    	else{
+	    		res.render('home', {user: data, title: 'Home Statistics'});
+	    	}
 	    });
-		console.log("Session:", req.user);
-		res.render('home',{ user: req.user, tweets: tweets});
 	}
-	
-  // res.render('index', { title: 'Express' });
 };

@@ -62,9 +62,6 @@ DBHandler.prototype.getLatestTweetId = function(userId, callback){
       "sort": {'id': -1}
     }
     tweet_collection.findOne({ 'user.id': userId}, {id:1},options,callback);
-    // tweet_collection.find({'user.id':userId}, {id:1}, options).toArray(function(error, result){
-    //           console.log("result:",result);
-    // });
     console.log("Inside getLatestTweetId");
   });
 };

@@ -27,11 +27,10 @@ module.exports =function(passport){
     callbackURL: callbackURL
     },
     function(token, tokenSecret, profile, done) {
-    //DB
       delete profile._raw;
       profile.access_token = token;
       profile.token_secret = tokenSecret;
-      //data = JSON.parse(profile);
+
       data = profile;
       //Fetch Tweets from getTweet module
       require('./getTweets.js').getTweet(token,tokenSecret,function(error){

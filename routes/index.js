@@ -24,7 +24,7 @@ exports.index = function(req, res){
 	    		console.log("Latest : ", data._json.status.created_at);
 	    		var avg = getAvg(data._json.created_at, data._json.status.created_at,data._json.statuses_count);
 	    		console.log(avg);
-	    		res.render('home', {user: data, title: 'Home Statistics', avg : avg });
+	    		res.render('home', {user: data, avg : avg });
 	    	}
 	    });
 	}

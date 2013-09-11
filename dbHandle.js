@@ -145,15 +145,53 @@ DBHandler.prototype.getTodayTweet = function(userId, callback){
     }
     console.log("UserId:", userId);
     var dateformat = require("dateformat");
+    var date = new Date();
+    console.log("date = = ",date);
 
-    // var date = dateformat(Date()," ddd mmm d");
-    var date = "Fri Sep 06";
-    // date.format("%a %b %d %H:%M:%S +0000 %Y");
-    console.log("Date == >",date);
-    tweet_collection.find({ "created_at": '/'date'/'  }).toArray(function(err, results){
+    var today = dateformat(new Date(),"ddd mmm d HH:MM:ss +0000 yyyy");
+    console.log("Today s date = = ",today);
+    var yesterday = dateformat(new Date(date.getTime() - (24 * 60 * 60 * 1000)),"ddd mmm d HH:MM:ss +0000 yyyy");
+
+    tweet_collection.find({ created_at : { $gte:yesterday , $lte : today } }).toArray(function(err, results){
       callback(null, results);
     });
   });
 };
 
+DBHandler.prototype.getTweetsByDate = function(userId, date, callback){
+  var self = this;
+  var tweets = '';
+  console.log("Input Date === ",date);
+  var date = new Date(date);
+  console.log("Dddd = ",date);
+
+  var dateformat = require("dateformat");
+  var datetime = require("datetime");
+  console.log("Input Date === ",date);
+
+  var today = dateformat(new Date(date),"ddd mmm d 00:00:00 +0000 yyyy");
+  var yesterday = dateformat(new Date(date.getTime() - (24 * 60 * 60 * 1000)),"ddd mmm d 00:00:00 +0000 yyyy");
+  console.log("Today === >>",today);
+  console.log("Yesterday === >>",yesterday);
+
+  this.db.collection('tweets',function(error,tweet_collection){
+    if(error){
+      console.log(error);
+      if(error.message.indexOf('unique')) {
+        // ignore
+        console.log('Duplicate');
+      } else {
+        return callback(error);
+      }
+    }
+    var options = {
+      "sort": {'id': -1}
+    }
+
+  tweet_collection.find({ created_at : { $gte : today }}).toArray(function(err, test){
+    callback(null, test);
+  });
+});
+
+};
 exports.DBHandler = DBHandler;

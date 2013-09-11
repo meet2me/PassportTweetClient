@@ -21,9 +21,29 @@ exports.index = function(req, res){
 	        tweets = data;
 	        // console.log("DAta:", data);
 		console.log("Session:", req.user);
-		res.render('home',{ user: req.user, tweets: tweets});
+		res.render('home',{ user: req.user, tweets: tweets, result:''});
 		});
 	}
-	
+
   // res.render('index', { title: 'Express' });
+};
+exports.todayTweet = function(req, res){
+	dbHandler.getTodayTweet(req.user.id, function(error, result){
+    	res.render('home', { user: req.user, result : result });
+  	} );
+
+};
+exports.getTweets = function(req, res){
+	var day = req.body.day;
+	var month = req.body.month;
+	var year = req.body.year;
+
+	var date = day+month+year;
+	console.log("Date == ",date);
+
+	dbHandler.getTweetsByDate(req.user.id, date, function(error, test){
+		res.render('home', { user:req.user, test: test, result : '' });
+	// });
+	// console.log("Result == ",test);
+	});
 };

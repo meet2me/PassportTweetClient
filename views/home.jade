@@ -34,8 +34,53 @@ html
       br
       | Total Tweets: #{user._json.statuses_count}
       br
+      a(href='/todayTweet') Today's Tweets : 
+      - var count=0
+      - each res in result
+        - count++
+
+      | #{count}
+
+      br
+      br
+      form(action="/getTweets", method="post")
+        .row
+          .span7
+          .span1
+            select.input-small(name='day')
+              - for (var i = 1; i <= 31; ++i) {
+                option(value = '#{i}') #{i}
+              - }
+          .span1
+            select.input-small(name='month')
+              option(value='Jan') January
+              option(value='Feb') February
+              option(value='Mar') March
+              option(value='Aprl') April
+              option(value='May') May
+              option(value='June') June
+              option(value='July') July
+              option(value='Aug') August
+              option(value='Sept') Septmber
+              option(value='Oct') October
+              option(value='Nev') Nevember
+              option(value='Dec') December
+          .span1
+            select.input-small(name = 'year')
+              option(value='2010') 2010
+              option(value='2011') 2011
+              option(value='2012') 2012
+              option(value='2013') 2013
+        input.btn.btn-success(type='submit', value='Search')
+
+      br
       |  Last Tweet At: #{user._json.status.created_at}
       br
       | Followers Count: #{user._json.followers_count}
       br
       | Friends Count: #{user._json.friends_count}
+      
+      br
+      - if(test)
+        - each t in test
+          br

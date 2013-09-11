@@ -58,7 +58,6 @@ module.exports = {
 
     var options = createSignature.create(method,urlString,params,oauth_headers,consumerSecret,tokenSecret);
     var tweets = '';
-    var text = '';
     
     var reqGet = https.request(options, function(resToken) {
       console.log("statusCode: ", resToken.statusCode);
@@ -78,14 +77,16 @@ module.exports = {
             console.log("Error:" ,error);
           }
           if(id!=null){
-            since_id = id.id;    //since_id : Id of last/recent tweet in DB
+            since_id = id.id;    //id of last/recent tweet in DB
             console.log("since_id:",since_id);
           }
-          // console.log("since_id:",id.tweetId);
           
           console.log("Current Tweet Id from Twitter:", this_tweet_id);
           if(since_id > 0 && this_tweet_id > since_id){
             console.log("If more new tweets are available..");
+            // while(since_id != this_tweet_id){
+            //   self.getMoreTweets(userId,token,tokenSecret,since_id);
+            // }
             self.getMoreTweets(userId,token,tokenSecret,since_id);
           }
           //Save tweets to DB
@@ -106,17 +107,22 @@ module.exports = {
   },
 
   getMoreTweets : function(userId,token,tokenSecret,since_id){
+
+    console.log("In getMoreTweets......!");
+    var self = this;
     var oauth_headers = this.buildHeaders({
       token: token
     });
+
     var params = ['count=200',
       'since_id='+since_id,
       'user_id='+userId
     ];
-    //params.join('&');
+
     var options = createSignature.create(method,urlString,params,oauth_headers,consumerSecret,tokenSecret);
     var tweets = '';
-    var text = '';
+    var sinceId = '';
+
     var reqGet = https.request(options, function(resToken) {
       console.log("statusCode: ", resToken.statusCode);
       var data = '';
@@ -125,7 +131,6 @@ module.exports = {
       });
       resToken.on('end', function() {
         tweets = JSON.parse(data);
-        // console.log("Tweets:",tweets);
         dbHandler.saveTweets(tweets,function(error){
           if(error) {
             console.log("DB Error:",error);

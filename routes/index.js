@@ -2,6 +2,7 @@
 /*
  * GET home page.
  */
+var date = require("date-extended");
 var DBHandler = require('../dbHandle.js').DBHandler;
 var dbHandler = new DBHandler('localhost', 27017);
 
@@ -19,8 +20,29 @@ exports.index = function(req, res){
 	    		console.log("DB Error : ", error);
 	    	}
 	    	else{
-	    		res.render('home', {user: data, title: 'Home Statistics'});
+	    		console.log("First : ", data._json.created_at);
+	    		console.log("Latest : ", data._json.status.created_at);
+	    		var avg = getAvg(data._json.created_at, data._json.status.created_at,data._json.statuses_count);
+	    		console.log(avg);
+	    		res.render('home', {user: data, title: 'Home Statistics', avg : avg });
 	    	}
 	    });
 	}
 };
+
+function getAvg(first,last,totalTweets){
+
+	dtA = stringToDate(first);
+	dtB = stringToDate(last);
+	var diff = date.difference(dtA, dtB, "week");
+	console.log("Diff: ", (totalTweets/diff));
+	var avg = (totalTweets/diff);
+	return (avg.toFixed(2));
+}
+function stringToDate(s) {
+  var b = s.split(/[: ]/g);
+  var m = {jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6,
+           aug:7, sep:8, oct:9, nov:10, dec:11};
+
+  return new Date(Date.UTC(b[7], m[b[1].toLowerCase()], b[2], b[3], b[4], b[5]));
+}

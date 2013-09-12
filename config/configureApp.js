@@ -1,5 +1,5 @@
 var express = require('express');
-
+var path = require('path');
 var RedisStore= require('connect-redis')(express);
 var sStore  = new RedisStore();
 
@@ -15,7 +15,7 @@ module.exports = function(app){
     app.set('view options', {layout: false});
     app.use(express.favicon());
     app.use(express.logger('dev'));
-    //app.use(express.static('public'));
+    app.use(express.static('public'));
     app.use(express.cookieParser());
     app.use(express.session({store: sStore, secret: '1234567890QWERTY', cookie: { maxAge: 86400000 }}));
     app.use(passport.initialize());
@@ -23,6 +23,8 @@ module.exports = function(app){
     app.use(express.bodyParser());
     app.use(app.router);
     app.use(require('stylus').middleware(__dirname + 'public'));
-    app.use(express.static(__dirname + 'public'));
+    // app.use(express.static(__dirname + 'public'));
+    app.use(express.static(path.join(__dirname + 'public')));
+    app.use('public/javascripts', express.static(path.join(__dirname, 'public/javascripts')));
   });
 };

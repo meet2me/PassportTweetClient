@@ -13,7 +13,6 @@ a{
 a:hover{
 	text-decoration: underline;
 	text-indent: 2px;
-	text-transform: 3px;
 	transition : 0.7s;
 	color:blue;
 }
@@ -23,7 +22,7 @@ a{
 #heading{
 	margin-left: 25%;
 	width: 50%;
-	vertical-align: center;
+	vertical-align: middle;
 	font-size: 18px;
 	border: 1px solid #DDD;
 }

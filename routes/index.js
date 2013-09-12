@@ -51,6 +51,25 @@ exports.getTweets = function(req, res){
 	});
 };
 
+exports.graph = function(req, res){
+  	
+	var tweets = '';
+
+	if(!req.isAuthenticated()){
+		res.render('getLogin');
+	}
+	else{
+	    dbHandler.getUserTweets(req.user.id, function(error,data){
+	    	if(error){
+	    		console.log("DB Error : ", error);
+	    	}
+	    	else{
+	    		res.render('graph', {tweets: data});
+	    	}
+	    });
+	}
+};
+
 function getAvg(first,last,totalTweets){
 
 	dtA = stringToDate(first);

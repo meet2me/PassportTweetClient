@@ -1,0 +1,15 @@
+extends layouts/default
+
+block main
+  h1= title
+
+block content
+  input(type = 'text', value = 'mit' ,id = 'tweet')
+  #placeholder(style='width: 600px; height: 300px;')
+
+script(type='text/javascript').
+  $( document ).ready(function(){
+    var tweet = $('#tweet').val();
+    alert(tweet);
+    var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+  });

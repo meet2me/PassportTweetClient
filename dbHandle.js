@@ -19,7 +19,12 @@ DBHandler = function(host, port) {
   	}
   });
 };
-
+function parseTwitterDate(text) {
+  var newtext = text.replace(/(\+\S+) (.*)/, '$2 $1') ;
+  var date = new Date(Date.parse(text)).toLocaleDateString();
+  var time = new Date(Date.parse(text)).toLocaleTimeString();
+  return date;
+}
 DBHandler.prototype.saveTweets = function(tweets,callback){
   this.db.collection('tweets',function(error,tweet_collection) {
     var userId = '';
@@ -31,6 +36,10 @@ DBHandler.prototype.saveTweets = function(tweets,callback){
     else {
       async.each(tweets,function(item,callback){
         item._id = item.id_str;
+
+        var date = parseTwitterDate(item.created_at);
+        item.tweetDate = new Date(date);
+
         tweet_collection.insert(item,function(){
           callback(null,tweets);
         });

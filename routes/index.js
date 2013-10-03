@@ -64,6 +64,11 @@ exports.graph = function(req, res){
 	    		console.log("DB Error : ", error);
 	    	}
 	    	else{
+	   //  		var jsonTxt = fs.writeFile('output.json',JSON.stringify(data, null, 2),function(err){
+				//   if(err){
+				//     console.log(err);
+				//   }
+				// });
 	    		res.render('graph', {tweets: data});
 	    	}
 	    });

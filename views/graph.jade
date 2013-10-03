@@ -4,12 +4,34 @@ block main
   h1= title
 
 block content
-  input(type = 'text', value = 'mit' ,id = 'tweet')
+  input(type = 'text', value = '#{tweets}' ,id = 'tweet')
   #placeholder(style='width: 600px; height: 300px;')
-
-script(type='text/javascript').
-  $( document ).ready(function(){
-    var tweet = $('#tweet').val();
-    alert(tweet);
-    var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
-  });
+  | #{tweets}
+  script(type='text/javascript').
+    $( document ).ready(function(){
+      var tweets = $('#tweet');
+      $.plot('#placeholder', tweets);
+      //- var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], {
+      //-   xaxis:
+      //-   [{
+      //-     mode : "time"
+      //-     timezone : "browser"
+      //-     font : {
+      //-       size: 11,
+      //-       lineHeight: 13,
+      //-       style: "italic",
+      //-       weight: "bold",
+      //-       family: "sans-serif",
+      //-       variant: "small-caps",
+      //-       color: "#545454"
+      //-     }
+      //-     ticks : [1 , "month"]
+      //-   }],
+      //-   yaxis:
+      //-   [{
+      //-     min: 5
+      //-     max: 25
+      //-   }] 
+      //- });
+      //- var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+    });

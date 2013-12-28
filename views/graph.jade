@@ -4,34 +4,49 @@ block main
   h1= title
 
 block content
+  each date in tweets
+    p| #{date}
+
   input(type = 'text', value = '#{tweets}' ,id = 'tweet')
   #placeholder(style='width: 600px; height: 300px;')
   | #{tweets}
   script(type='text/javascript').
     $( document ).ready(function(){
-      var tweets = $('#tweet');
-      $.plot('#placeholder', tweets);
-      //- var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], {
-      //-   xaxis:
-      //-   [{
-      //-     mode : "time"
-      //-     timezone : "browser"
-      //-     font : {
-      //-       size: 11,
-      //-       lineHeight: 13,
-      //-       style: "italic",
-      //-       weight: "bold",
-      //-       family: "sans-serif",
-      //-       variant: "small-caps",
-      //-       color: "#545454"
-      //-     }
-      //-     ticks : [1 , "month"]
-      //-   }],
-      //-   yaxis:
-      //-   [{
-      //-     min: 5
-      //-     max: 25
-      //-   }] 
-      //- });
-      //- var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+      var tweets = $('#tweet').val();
+      var data = [];
+      alert(sizeof(tweets));
+      for(i=0; i<= tweet.length ; i++){
+        //- data.append(i,tweet);
+
+      }
+      //- alert(data);
+      //- data = [
+      //-   [1301634000000, 315.71],
+      //-   [1301628900000, 112.71],
+      //-   [1302334000000, 302.71],
+      //- ];
+
+      //- $.plot('#placeholder', data);
+      var plot = $.plot('#placeholder', [ [[0, 0], [1, 1]] ], {
+        xaxis:
+        [{
+          mode : "time",
+          timeformat: "%Y/%m/%d",
+          font : {
+            size: 11,
+            lineHeight: 13,
+            style: "italic",
+            weight: "bold",
+            family: "sans-serif",
+            variant: "small-caps",
+            color: "#545454"
+          },
+          ticks : [1 , "month"]
+        }],
+        yaxis:
+        [{
+          min: 5,
+          max: 25
+        }] 
+      });
     });

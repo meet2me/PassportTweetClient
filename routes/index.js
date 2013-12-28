@@ -5,7 +5,7 @@
 var date = require("date-extended");
 var DBHandler = require('../dbHandle.js').DBHandler;
 var dbHandler = new DBHandler('localhost', 27017);
-
+var async = require('async');
 exports.index = function(req, res){
   	
 	var data ='';
@@ -54,9 +54,10 @@ exports.getTweets = function(req, res){
 exports.graph = function(req, res){
   	
 	var tweets = '';
-
+	var counter = 0;
+	var arr = [];
 	if(!req.isAuthenticated()){
-		res.render('getLogin');
+		// res.render('getLogin');
 	}
 	else{
 	    dbHandler.getUserTweets(req.user.id, function(error,data){
@@ -64,12 +65,13 @@ exports.graph = function(req, res){
 	    		console.log("DB Error : ", error);
 	    	}
 	    	else{
-	   //  		var jsonTxt = fs.writeFile('output.json',JSON.stringify(data, null, 2),function(err){
-				//   if(err){
-				//     console.log(err);
-				//   }
-				// });
-	    		res.render('graph', {tweets: data});
+	    		async.each(data,function(item, callback){
+	    			var dt = new Date(item.created_at).getTime();
+	    			console.log(counter +":=>"+dt);
+	    			arr[counter] = dt;
+	    			counter = counter + 1;
+	    		});
+	    		res.render('graph', {tweets: arr});
 	    	}
 	    });
 	}

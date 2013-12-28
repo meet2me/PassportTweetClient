@@ -1,7 +1,4 @@
 var http = require('http');
-var path = require('path');
-var https = require('https');
-var fs = require('fs');
 
 var express = require('express');
 var app = express();
@@ -35,5 +32,5 @@ app.post('/getTweets', routes.getTweets);
 app.get('/graph', routes.graph);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  //console.log('Express server listening on port ' + app.get('port'));
 });

@@ -1,21 +1,16 @@
 var https = require ('https');
-var url = require('url');
 var request = require('request');
-var crypto = require('crypto');
-var http = require('http');
 var fs = require('fs');
 //var mongoose = require('mongoose');
 
 var DBHandler = require('./dbHandle.js').DBHandler;
 var dbHandler= new DBHandler('localhost', 27017);
 
-var createSignature = require('./createSignature.js')
+var createSignature = require('./createSignature.js');
 var randomGeneration = require('./randomGeneration.js');
-
 var obj = JSON.parse(fs.readFileSync('./config/consumerCredentials.json', 'utf8'));
 var consumerKey = obj.consumer_key;
 var consumerSecret = obj.consumer_secret_key;
-var callbackURL = obj.callback;
 
 var method = 'GET';
 var urlTimeline = JSON.parse(fs.readFileSync('./config/getUrl.json', 'utf8'));
@@ -60,7 +55,7 @@ module.exports = {
     var tweets = '';
     
     var reqGet = https.request(options, function(resToken) {
-      console.log("statusCode: ", resToken.statusCode);
+      //console.log("statusCode: ", resToken.statusCode);
       var data = '';
       resToken.on('data', function(chunk) {
         data += chunk;
@@ -74,16 +69,16 @@ module.exports = {
         //Check against DB if new Tweet is available : match stored-max_id  with current max_tweet_id
         dbHandler.getLatestTweetId(userId,function(error,id){
           if(error){
-            console.log("Error:" ,error);
+            //console.log("Error:" ,error);
           }
-          if(id!=null){
+          if(id!==null){
             since_id = id.id;    //id of last/recent tweet in DB
-            console.log("since_id:",since_id);
+            //console.log("since_id:",since_id);
           }
           
-          console.log("Current Tweet Id from Twitter:", this_tweet_id);
+          //console.log("Current Tweet Id from Twitter:", this_tweet_id);
           if(since_id > 0 && this_tweet_id > since_id){
-            console.log("If more new tweets are available..");
+            //console.log("If more new tweets are available..");
             // while(since_id != this_tweet_id){
             //   self.getMoreTweets(userId,token,tokenSecret,since_id);
             // }
@@ -91,25 +86,24 @@ module.exports = {
           }
           //Save tweets to DB
           else if(!since_id){
-            console.log("If New User..");
+            //console.log("If New User..");
             dbHandler.saveTweets(tweets,function(error){
             if(error) {
-              console.log("DB Error:",error);
+              //console.log("DB Error:",error);
             }
             });
           }
         });
       });
     }).on('error', function(error) {
-        console.log("Error: ", error);
+        //console.log("Error: ", error);
       });
     reqGet.end();
   },
 
   getMoreTweets : function(userId,token,tokenSecret,since_id){
 
-    console.log("In getMoreTweets......!");
-    var self = this;
+    //console.log("In getMoreTweets......!");
     var oauth_headers = this.buildHeaders({
       token: token
     });
@@ -121,10 +115,9 @@ module.exports = {
 
     var options = createSignature.create(method,urlString,params,oauth_headers,consumerSecret,tokenSecret);
     var tweets = '';
-    var sinceId = '';
-
+    
     var reqGet = https.request(options, function(resToken) {
-      console.log("statusCode: ", resToken.statusCode);
+      //console.log("statusCode: ", resToken.statusCode);
       var data = '';
       resToken.on('data', function(chunk) {
         data += chunk;
@@ -133,12 +126,12 @@ module.exports = {
         tweets = JSON.parse(data);
         dbHandler.saveTweets(tweets,function(error){
           if(error) {
-            console.log("DB Error:",error);
+            //console.log("DB Error:",error);
           }
         });
       });
     }).on('error',function(error){
-      console.log("Error:",error);
+      //console.log("Error:",error);
     });
     reqGet.end();
   }

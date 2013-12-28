@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+public/flot/examples
+public/flot/Makefile
+public/javascripts/flot/examples
+public/javascripts/flot/Makefile

@@ -2,6 +2,13 @@ PassportTweetStatistics
 ===================
 
 Twitter Statistics with NodeJS and Passport Auth
+<h2>Instructions</h2>
+To run this perform following steps:
+<ol type='1'>
+	<li>npm install</li>
+	<li>Change 'callback' parameter in 'config/consumerCredentials.json' to your localhost with mentioned port</li>
+	<li>Start app with node app.js</li>
+</ol>
 <h2>Features</h2>
 <ul>
 	<li> Login with Twitter </li>

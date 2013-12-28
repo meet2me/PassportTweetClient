@@ -6,14 +6,15 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var DBHandler = require('./dbHandle.js').DBHandler;
 var dbHandler = new DBHandler('localhost', 27017);
 
-var obj = JSON.parse(fs.readFileSync('config/consumerCredentials.json', 'utf8'));
-var consumerKey = obj.consumer_key;
-var consumerSecret = obj.consumer_secret_key;
+var obj = JSON.parse(
+fs.readFileSync('config/consumerCredentials.json', 'utf8'));
+var consumerKey = obj.consumerKey;
+var consumerSecret = obj.consumerSecretKey;
 var callbackURL = obj.callback;
 
 
 module.exports =function(passport){
-
+  var data;
   passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
@@ -27,7 +28,7 @@ module.exports =function(passport){
     callbackURL: callbackURL
     },
     function(token, tokenSecret, profile, done) {
-      delete profile._raw;
+      // delete profile._raw;
       profile.access_token = token;
       profile.token_secret = tokenSecret;
 
@@ -35,17 +36,17 @@ module.exports =function(passport){
       //Fetch Tweets from getTweet module
       require('./getTweets.js').getTweet(token,tokenSecret,function(error){
         if(error){
-          console.log("Error Fetching Tweet: ",error);
+          // console.log("Error Fetching Tweet: ",error);
         }
       });
-      console.log("Before findOrCreateUser");
+      // console.log("Before findOrCreateUser");
       dbHandler.findOrCreateUser(profile, function(error, user){
         if(error){
-          console.log("DB Error : ", error);
+          // console.log("DB Error : ", error);
         }
         return done(null, user);
       });
-      console.log("After findOrCreateUser");
+      // console.log("After findOrCreateUser");
     }
   ));
 };
